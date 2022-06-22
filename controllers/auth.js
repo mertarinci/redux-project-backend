@@ -32,6 +32,10 @@ const getAllUsers = asyncErrorWrapper(async (req,res) => {
     })
 })
 
+const login = asyncErrorWrapper(async (req,res,next) => {
+    
+})
+
 
 module.exports = {
     register,
