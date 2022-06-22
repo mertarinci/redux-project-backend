@@ -10,6 +10,7 @@ const addNewPost = asyncErrorWrapper(async (req,res) => {
     const post = await Posts.create({
         title:information.title,
         content:information.content,
+        postImage:information.postImage || "https://picsum.photos/300/300"
     });
 
     res.status(200)

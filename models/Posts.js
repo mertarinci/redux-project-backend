@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 
 
@@ -7,6 +8,7 @@ const Schema = mongoose.Schema;
 
 const PostsSchema = new Schema({
 
+    _id:Number,
     title:{
         type: String,
         required: [true,"Please provide a title."],
@@ -22,8 +24,14 @@ const PostsSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
-})
+    },},{_id:false}
+)
+
+PostsSchema.plugin(AutoIncrement);
+
+
+
+
 
 module.exports = mongoose.model("Posts",PostsSchema)
 
