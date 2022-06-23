@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 
 
@@ -8,9 +9,8 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
 
-    userId:Number,
-
-    email:{
+    
+     email:{
         type:String,
         required:[true,"Please provide an email."],
         unique:true,
@@ -34,9 +34,30 @@ const UserSchema = new Schema({
     profileImage:{
         type:String,
         default:"https://picsum.photos/300/300"
+    },
+    userId:{
+        type:Number
     }
 
 })
+
+UserSchema.methods.generateJwtFromUser = function(){
+
+
+    const {JWT_SECRET,JWT_EXPIRE} = process.env;
+
+    const payload = {
+        username: this.username,
+        userId: this.userId
+    };
+
+    const token = jwt.sign({...payload},JWT_SECRET,{
+        expiresIn: JWT_EXPIRE
+    });
+
+    return token;
+
+}
 
 
 
