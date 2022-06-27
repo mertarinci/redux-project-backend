@@ -7,10 +7,15 @@ const addNewPost = asyncErrorWrapper(async (req,res) => {
 
     const information = req.body;
 
+
+    const userId = parseInt(req.user.userId)
+
+
     const post = await Posts.create({
         title:information.title,
         content:information.content,
-        postImage:information.postImage || "https://picsum.photos/300/300"
+        postImage:information.postImage || "https://picsum.photos/300/300",
+        user: userId
     });
 
     res.status(200)

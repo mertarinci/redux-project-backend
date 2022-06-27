@@ -48,7 +48,9 @@ UserSchema.methods.generateJwtFromUser = function(){
 
     const payload = {
         username: this.username,
-        userId: this.userId
+        userId: this.userId,
+        email : this.email,
+        id:this._id
     };
 
     const token = jwt.sign({...payload},JWT_SECRET,{

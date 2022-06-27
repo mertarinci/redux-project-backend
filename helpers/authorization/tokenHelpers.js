@@ -7,7 +7,13 @@ const sendJwtToClient = (user,res) => {
     const token = user.generateJwtFromUser();
 
 
-    return res.status(200).json({
+    return res.status(200)
+    .cookie("access_token",token, {
+        httpOnly:true,
+        expires: new Date(Date.now() + 10000 * 6 * 10),
+        secure:false
+    })
+    .json({
         success:true,
         access_token:token,
         data:{

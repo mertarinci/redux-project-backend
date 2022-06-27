@@ -17,7 +17,12 @@ const register = asyncErrorWrapper( async (req,res) => {
 
     res.status(200).json({
         success: true,
-        data: user
+        data: {
+            email:user.email,
+            username:user.username,
+            userId:user.userId,
+            profileImage:user.profileImage
+        }
     })
     
 })
@@ -25,14 +30,10 @@ const register = asyncErrorWrapper( async (req,res) => {
 const getAllUsers = asyncErrorWrapper(async (req,res) => {
 
   
-    const query = User.find();
 
-    const users = await query;
 
-    res.status(200).json({
-        success:true,
-        data: users
-    })
+
+    res.status(200).json(res.queryResult)
 })
 
 const login = asyncErrorWrapper(async (req,res,next) => {

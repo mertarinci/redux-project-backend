@@ -24,7 +24,14 @@ const PostsSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    },},{_id:false}
+    },
+    user: {
+        type: Number,
+        required:true,
+        ref:"User"
+
+    }
+},{_id:false}
 )
 
 PostsSchema.plugin(AutoIncrement);
