@@ -2,7 +2,8 @@ const asyncErrorWrapper = require("express-async-handler");
 const CustomError = require("../helpers/error/CustomError");
 const { validateUserInput, comparePassword } = require("../helpers/input/inputHelpers");
 const User = require("../models/User");
-const {sendJwtToClient} = require("../helpers/authorization/tokenHelpers")
+const {sendJwtToClient} = require("../helpers/authorization/tokenHelpers");
+const sendEmail = require("../helpers/libraries/sendEmail");
 
 
 const register = asyncErrorWrapper( async (req,res) => {
@@ -28,9 +29,6 @@ const register = asyncErrorWrapper( async (req,res) => {
 })
 
 const getAllUsers = asyncErrorWrapper(async (req,res) => {
-
-  
-
 
 
     res.status(200).json(res.queryResult)
@@ -67,9 +65,64 @@ const login = asyncErrorWrapper(async (req,res,next) => {
 
 })
 
+const forgotPassword = asyncErrorWrapper(async (req,res,next) => {
+
+    const resetEmail = req.body.email
+
+
+    const user = await User.findOne({
+        email: resetEmail
+    });
+
+    if(!user){
+        return next(new CustomError("User not found! (Invalid Email)",400))
+    }
+
+    const resetPasswordToken = user.getResetToken();
+
+
+    await user.save();
+
+    const resetPasswordUrl = `http://localhost:4000/api/user/forgotPassword?resetPasswordToken=${resetPasswordToken}`
+
+    const emailTemp = `
+    <h1>Reset Your Password</h1>
+    <p><a href="${resetPasswordUrl}">This</a> is your reset token.</p>
+    <p>Tıklayamıyorsanız: ${resetPasswordUrl}</p>
+    ` ;
+
+    try{
+
+        await sendEmail({
+            from: process.env.SMTP_USER,
+            to: resetEmail,
+            subject: "Reset Your Password",
+            html: emailTemp
+        });
+
+        return res.status(200).json({
+            sucess: true,
+            message:"Token Sent to your email."
+        })
+
+    }catch(err){
+
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save();
+
+        return next(new CustomError("Email couldn't be sent",500))
+
+    }
+
+
+})
+
 
 module.exports = {
     register,
     getAllUsers,
-    login
+    login,
+    forgotPassword
 }

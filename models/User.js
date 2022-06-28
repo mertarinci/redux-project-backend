@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto")
 
 
 
@@ -37,6 +38,12 @@ const UserSchema = new Schema({
     },
     userId:{
         type:Number
+    },
+    resetPasswordToken: {
+        type:String
+    },
+    resetPasswordExpire: {
+        type:Date
     }
 
 })
@@ -60,6 +67,23 @@ UserSchema.methods.generateJwtFromUser = function(){
     return token;
 
 }
+
+UserSchema.methods.getResetToken = function(){
+
+
+    const randomHexString = crypto.randomBytes(15).toString("hex")
+
+    const resetPasswordToken = crypto
+    .createHash("SHA256")
+    .update(randomHexString)
+    .digest("hex")
+
+    this.resetPasswordToken = resetPasswordToken
+    this.resetPasswordExpire = Date.now() + 300000
+
+    return resetPasswordToken;
+
+    }
 
 
 
