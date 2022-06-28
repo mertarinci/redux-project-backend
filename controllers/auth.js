@@ -83,7 +83,7 @@ const forgotPassword = asyncErrorWrapper(async (req,res,next) => {
 
     await user.save();
 
-    const resetPasswordUrl = `http://localhost:4000/api/user/forgotPassword?resetPasswordToken=${resetPasswordToken}`
+    const resetPasswordUrl = `http://localhost:4000/api/user/resetPassword?resetPasswordToken=${resetPasswordToken}`
 
     const emailTemp = `
     <h1>Reset Your Password</h1>
@@ -119,10 +119,69 @@ const forgotPassword = asyncErrorWrapper(async (req,res,next) => {
 
 })
 
+const resetPassword = asyncErrorWrapper(async (req,res,next) => {
+
+    const {resetPasswordToken} = req.query;
+
+    const {password} = req.body;
+
+    if(!resetPasswordToken){
+        return next(new CustomError("You don't have a valid token!",400))
+    }
+
+    let user = await User.findOne({
+        resetPasswordToken : resetPasswordToken,
+        resetPasswordExpire : {$gt: Date.now()}
+    })
+
+    if(!user){
+        return next(new CustomError("Invalid token or Reset Password Session Expired",404))
+    }
+
+    user.password = password
+
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    const emailTemp = `
+    <h1>You have changed your password.</h1>
+    <p>Thanks for choosing us.</p>
+    <p>To contact: Patrianch#3873 on Discord.</p>
+    ` ;
+
+    try{
+
+        await sendEmail({
+            from: process.env.SMTP_USER,
+            to: user.email,
+            subject: "Your password resetted.",
+            html: emailTemp
+        });
+
+        return res.status(200)
+        .json({
+            success: true,
+            message: "Reset Password Completed"
+        })
+
+    }catch(err){
+
+        return next(new CustomError("Email couldn't be sent",500))
+
+    }
+
+
+})
+
+
+
 
 module.exports = {
     register,
     getAllUsers,
     login,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 }
