@@ -10,8 +10,9 @@ const sendJwtToClient = (user,res) => {
     return res.status(200)
     .cookie("access_token",token, {
         httpOnly:true,
-        expires: new Date(Date.now() + 10000 * 6 * 10),
-        secure:false
+        expires: new Date(Date.now() + 10000),
+        secure:true,
+        path:"/"
     })
     .json({
         success:true,
