@@ -39,6 +39,10 @@ const UserSchema = new Schema({
     userId:{
         type:Number
     },
+    role:{
+        type:String,
+        default:"user"
+    },
     resetPasswordToken: {
         type:String
     },

@@ -7,6 +7,8 @@ const sendJwtToClient = (user,res) => {
     const token = user.generateJwtFromUser();
 
 
+
+
     return res.status(200)
     .cookie("access_token",token, {
         httpOnly:true,
@@ -20,7 +22,8 @@ const sendJwtToClient = (user,res) => {
         data:{
             username: user.username,
             email:user.email,
-            userId:user.userId
+            userId:user.userId,
+            role:user.role
         }
     })
 
