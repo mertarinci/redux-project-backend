@@ -1,12 +1,14 @@
 
 
 
-const sendJwtToClient = (user,res) => {
+const sendJwtToClient = async (user,res) => {
 
 
     const token = user.generateJwtFromUser();
 
+    user.isOnline = true
 
+    await user.save()
 
 
     return res.status(200)
@@ -23,7 +25,7 @@ const sendJwtToClient = (user,res) => {
             username: user.username,
             email:user.email,
             userId:user.userId,
-            role:user.role
+            role:user.role,
         }
     })
 

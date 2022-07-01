@@ -43,6 +43,10 @@ const UserSchema = new Schema({
         type:String,
         default:"user"
     },
+    isOnline: {
+        type:Boolean,
+        default:false
+    },
     resetPasswordToken: {
         type:String
     },
@@ -62,7 +66,8 @@ UserSchema.methods.generateJwtFromUser = function(){
         userId: this.userId,
         email : this.email,
         id:this._id,
-        role:this.role
+        role:this.role,
+        isOnline: this.isOnline
     };
 
     const token = jwt.sign({...payload},JWT_SECRET,{

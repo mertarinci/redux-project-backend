@@ -27,7 +27,7 @@ const sendChat = asyncErrorWrapper(async (req,res) => {
 
 const getChat = asyncErrorWrapper(async (req,res) => {
 
-    const query = Chat.find().sort({createdAt:1});
+    const query = Chat.find().sort({createdAt:-1});
 
     const messages = await query;
 

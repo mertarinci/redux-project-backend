@@ -36,7 +36,7 @@ const getAllUsers = asyncErrorWrapper(async (req,res) => {
 
 const login = asyncErrorWrapper(async (req,res,next) => {
     
-    const {username,password} = req.body;
+    const {username,password,isOnline} = req.body;
 
 
     if(!validateUserInput(username,password)){
@@ -175,6 +175,23 @@ const resetPassword = asyncErrorWrapper(async (req,res,next) => {
 
 })
 
+const logout = asyncErrorWrapper(async (req,res,next) => {
+
+
+    const {username} = req.body;
+
+    const user = await User.findOne({username})
+
+    user.isOnline = false
+
+    await user.save()
+
+    res.status(200).json({
+        success:true,
+        message:"Logout successful."
+    })
+})
+
 
 
 
@@ -183,5 +200,6 @@ module.exports = {
     getAllUsers,
     login,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    logout
 }
