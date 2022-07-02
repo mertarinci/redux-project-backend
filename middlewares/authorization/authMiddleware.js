@@ -1,6 +1,11 @@
 const CustomError = require("../../helpers/error/CustomError");
 const jwt = require("jsonwebtoken");
 const { isTokenIncluded, getAcccessTokenFromHeader } = require("../../helpers/authorization/tokenHelpers");
+const Posts = require("../../models/Posts");
+const asyncErrorWrapper = require("express-async-handler");
+const User = require("../../models/User");
+
+
 
 
 
@@ -36,6 +41,28 @@ const getAccesToRoute = function(req,res,next){
 
 }
 
+const getQuestionOwner =  asyncErrorWrapper(async (req,res,next) =>{
+
+    const {userId} = req.user;
+    const {id} = req.params
+
+    const post = await Posts.findById(id)
+
+    const user =  await User.find({userId})
+
+
+    if(user[0].role !== "admin"){
+        if(post.user !== userId){
+            return next(new CustomError("Only question owner and admins can edit posts.",403))
+        }
+    }
+
+
+    next();
+
+})
+
 module.exports = {
-    getAccesToRoute
+    getAccesToRoute,
+    getQuestionOwner
 }

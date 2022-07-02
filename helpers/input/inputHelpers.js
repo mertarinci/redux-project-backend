@@ -9,9 +9,14 @@ const comparePassword = (password,hashedPassword) => {
     return bcrypt.compareSync(password,hashedPassword);
 }
 
+const validateUpdatePost = (title,content) => {
+    return title && content;
+}
+
 
 
 module.exports = {
     validateUserInput,
-    comparePassword
+    comparePassword,
+    validateUpdatePost
 }

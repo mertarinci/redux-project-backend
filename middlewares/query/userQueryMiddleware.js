@@ -7,7 +7,7 @@ const userQueryMiddleware = function(model,options){
     return asyncErrorWrapper(async function (req,res,next){
 
 
-        let query = model.find();
+        let query = model.find().sort({isOnline: -1});
 
         query = searchHelper("name",query,req);
 

@@ -11,8 +11,7 @@ const PostsSchema = new Schema({
     _id:Number,
     title:{
         type: String,
-        required: [true,"Please provide a title."],
-        unique:true
+        required: [true,"Please provide a title."]
     },
     content:{
         type: String,
