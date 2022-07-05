@@ -10,7 +10,16 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
 
-    
+    firstName:{
+        type:String,
+        required:[true,"Please enter your first name."]
+
+    },
+    lastName: {
+        type:String,
+        required:[true,"Please enter your last name."]
+
+    },
      email:{
         type:String,
         required:[true,"Please provide an email."],
@@ -67,7 +76,9 @@ UserSchema.methods.generateJwtFromUser = function(){
         email : this.email,
         id:this._id,
         role:this.role,
-        isOnline: this.isOnline
+        isOnline: this.isOnline,
+        firstName: this.firstName,
+        lastName: this.lastName
     };
 
     const token = jwt.sign({...payload},JWT_SECRET,{

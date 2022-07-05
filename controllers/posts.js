@@ -10,14 +10,21 @@ const addNewPost = asyncErrorWrapper(async (req,res) => {
     const information = req.body;
 
 
-    const userId = parseInt(req.user.userId)
+    const userId = req.user.userId
+    const {id,firstName,lastName,username} = req.user
 
 
     const post = await Posts.create({
         title:information.title,
         content:information.content,
         postImage:information.postImage || "https://picsum.photos/300/300",
-        user: userId
+        user: userId,
+        mongoId:{
+            id:id,
+            firstName:firstName,
+            lastName:lastName,
+            username:username
+        }
     });
 
     res.status(200)
@@ -30,15 +37,10 @@ const addNewPost = asyncErrorWrapper(async (req,res) => {
 
 const getAllPosts = asyncErrorWrapper(async (req,res) => {
 
+    return res.status(200).json(res.queryResults);
+
   
-    const query = Posts.find();
 
-    const posts = await query;
-
-    res.status(200).json({
-        success:true,
-        data: posts
-    })
 })
 
 const editPost = asyncErrorWrapper(async (req,res) => {

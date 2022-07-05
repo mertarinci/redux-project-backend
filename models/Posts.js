@@ -29,6 +29,11 @@ const PostsSchema = new Schema({
         required:true,
         ref:"User"
 
+    },
+    mongoId: {
+        type:mongoose.Schema.ObjectId,
+        required:true,
+        ref:"User"
     }
 },{_id:false}
 )

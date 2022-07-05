@@ -8,12 +8,15 @@ const sendEmail = require("../helpers/libraries/sendEmail");
 
 const register = asyncErrorWrapper( async (req,res) => {
 
-    const {email,username,password} = req.body;
+    const {email,username,password,firstName,lastName} = req.body;
 
     const user = await User.create({
         email,
         username,
-        password
+        password,
+        firstName,
+        lastName
+
     })
 
     res.status(200).json({

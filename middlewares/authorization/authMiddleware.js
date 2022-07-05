@@ -32,7 +32,9 @@ const getAccesToRoute = function(req,res,next){
             username: decode.username,
             email: decode.email,
             role: decode.role,
-            isOnline: decode.isOnline
+            isOnline: decode.isOnline,
+            firstName: decode.firstName,
+            lastName: decode.lastName
         }
 
         next();

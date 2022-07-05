@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {register, getAllUsers,login,forgotPassword, resetPassword, logout} = require("../controllers/auth");
+const { editUser } = require("../controllers/user");
 const { getAccesToRoute } = require("../middlewares/authorization/authMiddleware");
 const {userQueryMiddleware} = require("../middlewares/query/userQueryMiddleware");
 const User = require("../models/User");
@@ -14,6 +15,7 @@ router.get("/getAllUsers",userQueryMiddleware(User),getAllUsers)
 router.post("/forgotPassword",forgotPassword);
 router.put("/resetPassword",resetPassword);
 router.post("/logout",logout)
+router.put("/edit",getAccesToRoute,editUser)
 
 
 
