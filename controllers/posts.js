@@ -19,12 +19,7 @@ const addNewPost = asyncErrorWrapper(async (req,res) => {
         content:information.content,
         postImage:information.postImage || "https://picsum.photos/300/300",
         user: userId,
-        mongoId:{
-            id:id,
-            firstName:firstName,
-            lastName:lastName,
-            username:username
-        }
+        mongoId: id,
     });
 
     res.status(200)
@@ -38,8 +33,6 @@ const addNewPost = asyncErrorWrapper(async (req,res) => {
 const getAllPosts = asyncErrorWrapper(async (req,res) => {
 
     return res.status(200).json(res.queryResults);
-
-  
 
 })
 

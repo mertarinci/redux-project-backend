@@ -189,7 +189,13 @@ const logout = asyncErrorWrapper(async (req,res,next) => {
 
     await user.save()
 
-    res.status(200).json({
+    res.status(200)
+    .cookie("access_token","",{
+        httpOnly:false,
+        expires: new Date(Date.now()),
+        secure:false
+    })
+    .json({
         success:true,
         message:"Logout successful."
     })

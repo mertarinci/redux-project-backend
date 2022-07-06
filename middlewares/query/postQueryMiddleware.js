@@ -14,11 +14,13 @@ const postQueryMiddleware = (model,options) => {
 
         const queryResults = await query;
 
+
+
         res.queryResults = {
             success:true,
             count:queryResults.length,
-            data:queryResults
-        }
+            data:queryResults,
+        }   
 
         next();
 

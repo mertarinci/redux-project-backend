@@ -10,6 +10,7 @@ const Posts = require("../models/Posts");
 
 
 router.post("/newPost",getAccesToRoute,addNewPost)
+
 router.get("/getAllPosts",postQueryMiddleware(Posts,{
     population : {
 
@@ -19,6 +20,7 @@ router.get("/getAllPosts",postQueryMiddleware(Posts,{
     }
 }
     ),getAllPosts)
+    
 router.put("/:id/edit",[getAccesToRoute,getQuestionOwner],editPost)
 router.delete("/:id/delete",[getAccesToRoute,getQuestionOwner],deletePost)
 

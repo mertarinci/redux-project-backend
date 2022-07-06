@@ -13,9 +13,9 @@ const sendJwtToClient = async (user,res) => {
 
     return res.status(200)
     .cookie("access_token",token, {
-        httpOnly:true,
-        expires: new Date(Date.now() + 10000),
-        secure:true,
+        httpOnly:false,
+        expires: new Date(Date.now() + 60000 * 15),
+        secure:false,
         path:"/"
     })
     .json({
